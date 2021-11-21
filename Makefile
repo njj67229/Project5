@@ -3,14 +3,14 @@ CC = g++
 
 all: main
 
-main: main.o BinaryTree.o
-	$(CC) $(CFLAGS) main.o BinaryTree.o -o main
+main: main.o Sorting.o
+	$(CC) $(CFLAGS) main.o Sorting.o -o main
 
 main.o : main.cpp
 	$(CC) -c main.cpp
 
-BinaryTree.o : BinaryTree.cpp BinaryTree.h
-	$(CC) -c BinaryTree.cpp
+Sorting.o : Sorting.cpp Sorting.h
+	$(CC) -c Sorting.cpp
 
 clean:
 	-rm -f core *.o

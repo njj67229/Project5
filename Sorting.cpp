@@ -3,14 +3,12 @@
 
 using namespace std;
 
-template<class T>
-Sorting(int max) {
+Sorting::Sorting(int max) {
     resetComps();
     maxItems = max;
 }
 
-template<class T>
-void swap (T* vals[], int first, int second) {
+void Sorting::swap (int* vals[], int first, int second) {
     if (first != second) {
         T tempVal = vals[first];
         vals[first] = vals[second];
@@ -18,8 +16,7 @@ void swap (T* vals[], int first, int second) {
     } //if
 } //swap end
 
-template <class T>
-int minIndex(T vals[], int start, int end) {
+int Sorting::minIndex(int* vals[], int start, int end) {
     int min = start;
     for (int i = start + 1; i <= end; i++) {
         if (vals[i] < vals[min]) {
@@ -30,16 +27,14 @@ int minIndex(T vals[], int start, int end) {
     return min;
 } //minIndex
 
-template <class T>
-void selectionSort (T vals[], int length) {
+void Sorting::selectionSort (int* vals[], int length) {
     int end = length - 1;
     for (int i = 0; i < end; i++) {
         swap (vals, i, minIndex(vals, i, end));
     } //for
 } //selectionSort
 
-template <class T>
-void mergeSort (T vals[] , int first, int last) {
+void Sorting::mergeSort (int* vals[] , int first, int last) {
     if (first < last) {
         int mid = (first + last)/2;
         mergeSort(vals, first, mid);
@@ -48,8 +43,7 @@ void mergeSort (T vals[] , int first, int last) {
     } //if
 } //mergeSort
 
-template <class T>
-void merge (T* vals[], int leftF, int leftL, int rightF, int rightL) {
+void Sorting::merge (int* vals[], int leftF, int leftL, int rightF, int rightL) {
     T temp[maxItems];
     int i = leftF;
     int saveFirst = leftFirst;
@@ -80,8 +74,7 @@ void merge (T* vals[], int leftF, int leftL, int rightF, int rightL) {
     }
 } //merge
 
-template <class T>
-void heapSort (T* vals[], int length) {
+void Sorting::heapSort (int* vals[], int length) {
     int i;
     for (i = (length/2) - 1; i >= 0; i--) {
         reheapDown (vals, i, length - 1);
@@ -92,7 +85,7 @@ void heapSort (T* vals[], int length) {
     } //for
 } //heapSort
 
-void reheapDown (T* vals[], int root, int bottom) {
+void Sorting::reheapDown (int* vals[], int root, int bottom) {
     int maxChild;
     int rightChild;
     int leftChild;
@@ -117,12 +110,57 @@ void reheapDown (T* vals[], int root, int bottom) {
     } //if
 } //reheapDown
 
-template <class T>
-int getComps () {
+int Sorting::splitArrayF(int* vals[], int start, int end) {
+    int pivot = vals[start];
+    int i = start - 1;
+    for (int j = start; j <= end - 1; j++) {
+        if (vals[j] <= pivot) {
+            i++;
+            swap(vals, i, j);
+        } //if
+        comps++;
+    } //for
+    swap(vals[i+1], vals[end]);
+    return i + 1;
+} //splitArrayF
+
+void Sorting::quickSortF(int* vals[], int start, int end) {
+    if (start < end) {
+        int partition = splitArrayF(vals, start, end);
+        quickSortF(vals, start, partition-1);
+        quickSortF(vals, partition+1, end);
+
+    } //if
+} //quickSortF
+
+int Sorting::splitArrayR(int* vals[], int start, int end) {
+    int pivInd = start + (rand() % (end - start + 1));
+    int pivot = vals[pivInd];
+    int i = start - 1;
+    for (int j = start; j <= end - 1; j++) {
+        if (vals[j] <= pivot) {
+            i++;
+            swap(vals, i, j);
+        } //if
+        comps++;
+    } //for
+    swap(vals[i+1], vals[end]);
+    return i + 1;
+} //splitArrayF
+
+void Sorting::quickSortR(int* vals[], int start, int end) {
+    if (start < end) {
+        int partition = splitArrayR(vals, start, end);
+        quickSortR(vals, start, partition-1);
+        quickSortR(vals, partition+1, end);
+
+    } //if
+} //quickSortF
+
+int Sorting::getComps () {
     return comps;
 }
 
-template <class T>
-void resetComps () {
+void Sorting::resetComps () {
     comps = 0;
 }
