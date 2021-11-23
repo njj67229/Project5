@@ -1,0 +1,16 @@
+Jacobi_Wetterhan_assignment5:
+total 412
+-rw-r--r--. 1 myid 141597 Nov 21 18:24 Jacobi_WetterhanAssignment5Report.pdf
+-rwxr-xr-x. 1 myid  39768 Nov 21 17:38 main
+-rw-r--r--. 1 myid   3543 Nov 21 16:40 main.cpp
+-rw-r--r--. 1 myid  54360 Nov 21 17:23 main.o
+-rw-r--r--. 1 myid    267 Nov 20 19:45 Makefile
+-rw-r--r--. 1 myid  48891 Nov 20 20:51 ordered.txt
+-rw-r--r--. 1 myid  48891 Nov 20 20:51 random.txt
+-rw-r--r--. 1 myid   2235 Nov 21 17:28 README.txt
+-rw-r--r--. 1 myid      0 Nov 21 18:25 rec11981
+-rw-r--r--. 1 myid  48891 Nov 20 20:51 reverse.txt
+-rw-r--r--. 1 myid   4644 Nov 21 17:18 Sorting.cpp
+-rw-r--r--. 1 myid    912 Nov 21 17:38 Sorting.h
+-rw-r--r--. 1 myid   8128 Nov 21 17:38 Sorting.o
+/home/myid/njj67229/2720/Jacobi_Wetterhan_assignment5:/home/myid/csci-2720a

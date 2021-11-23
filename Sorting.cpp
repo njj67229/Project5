@@ -1,22 +1,20 @@
 #include "Sorting.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 
-Sorting::Sorting(int max) {
+Sorting::Sorting() {
     resetComps();
-    maxItems = max;
 }
 
-void Sorting::swap (int* vals[], int first, int second) {
-    if (first != second) {
-        T tempVal = vals[first];
-        vals[first] = vals[second];
-        vals[second] = tempVal;
-    } //if
+void Sorting::swap (int* first, int* second) {
+    int tempVal = *first;
+    *first = *second;
+    *second = tempVal;
 } //swap end
 
-int Sorting::minIndex(int* vals[], int start, int end) {
+int Sorting::minIndex(int vals[], int start, int end) {
     int min = start;
     for (int i = start + 1; i <= end; i++) {
         if (vals[i] < vals[min]) {
@@ -27,14 +25,14 @@ int Sorting::minIndex(int* vals[], int start, int end) {
     return min;
 } //minIndex
 
-void Sorting::selectionSort (int* vals[], int length) {
+void Sorting::selectionSort (int vals[], int length) {
     int end = length - 1;
     for (int i = 0; i < end; i++) {
-        swap (vals, i, minIndex(vals, i, end));
+        swap (&vals[i], &vals[minIndex(vals, i, end)]);
     } //for
 } //selectionSort
 
-void Sorting::mergeSort (int* vals[] , int first, int last) {
+void Sorting::mergeSort (int vals[] , int first, int last) {
     if (first < last) {
         int mid = (first + last)/2;
         mergeSort(vals, first, mid);
@@ -43,12 +41,12 @@ void Sorting::mergeSort (int* vals[] , int first, int last) {
     } //if
 } //mergeSort
 
-void Sorting::merge (int* vals[], int leftF, int leftL, int rightF, int rightL) {
-    T temp[maxItems];
+void Sorting::merge (int vals[], int leftF, int leftL, int rightF, int rightL) {
+    int temp[maxItems];
     int i = leftF;
-    int saveFirst = leftFirst;
+    int saveFirst = leftF;
     while ((leftF <= leftL) && (rightF <= rightL)) {
-        if (vals[leftF] < vals[rightFirst]) {
+        if (vals[leftF] < vals[rightF]) {
             temp[i] = vals[leftF];
             leftF++;
         } else {
@@ -64,7 +62,7 @@ void Sorting::merge (int* vals[], int leftF, int leftL, int rightF, int rightL) 
         leftF++;
         i++;
     } //while
-    while (rightFirst <= rightLast) {
+    while (rightF <= rightL) {
         temp[i] = vals[rightF];
         rightF++;
         i++;
@@ -74,18 +72,18 @@ void Sorting::merge (int* vals[], int leftF, int leftL, int rightF, int rightL) 
     }
 } //merge
 
-void Sorting::heapSort (int* vals[], int length) {
+void Sorting::heapSort (int vals[], int length) {
     int i;
     for (i = (length/2) - 1; i >= 0; i--) {
         reheapDown (vals, i, length - 1);
     } //for
     for (i = length - 1; i >= 1; i--) {
-        swap (vals[0], vals[i]);
+        swap (&vals[0], &vals[i]);
         reheapDown (vals, 0, i - 1);
     } //for
 } //heapSort
 
-void Sorting::reheapDown (int* vals[], int root, int bottom) {
+void Sorting::reheapDown (int vals[], int root, int bottom) {
     int maxChild;
     int rightChild;
     int leftChild;
@@ -96,59 +94,67 @@ void Sorting::reheapDown (int* vals[], int root, int bottom) {
             maxChild = leftChild;
         } else {
             if (vals[leftChild] <= vals[rightChild]) {
-                maxChild = rigthChild;
+                maxChild = rightChild;
             } else {
                 maxChild = leftChild;
             } //if/else
             comps++;
         } //if/else
         if (vals[root] < vals[maxChild]) {
-            swap(vals[root], vals[maxChild]);
-            reheapDown(maxChild, bottom);
+            swap(&vals[root], &vals[maxChild]);
+            reheapDown(vals, maxChild, bottom);
         } //if
         comps++;
     } //if
 } //reheapDown
 
-int Sorting::splitArrayF(int* vals[], int start, int end) {
+int Sorting::splitArrayF(int vals[], int start, int end) {
     int pivot = vals[start];
-    int i = start - 1;
-    for (int j = start; j <= end - 1; j++) {
+    int i = (start+1);
+    for (int j = start+1; j <= end; j++) {
         if (vals[j] <= pivot) {
+            if (i != j) {
+                swap(&vals[i], &vals[j]);
+            }
             i++;
-            swap(vals, i, j);
         } //if
         comps++;
     } //for
-    swap(vals[i+1], vals[end]);
-    return i + 1;
+    swap(&vals[start], &vals[i-1]);
+    return (i-1);
 } //splitArrayF
 
-void Sorting::quickSortF(int* vals[], int start, int end) {
+
+int Sorting::splitArrayEnd(int vals[], int start, int end) {
+    int pivot = vals[end];
+    int i = (start-1);
+    for (int j = start; j <= end-1; j++) {
+        if (vals[j] <= pivot) {
+            i++;
+            swap(&vals[i], &vals[j]);
+        } //if
+        comps++;
+    } //for
+    swap(&vals[i+1], &vals[end]);
+    return (i+1);
+} //splitArrayEnd
+
+void Sorting::quickSortF(int vals[], int start, int end) {
     if (start < end) {
         int partition = splitArrayF(vals, start, end);
         quickSortF(vals, start, partition-1);
         quickSortF(vals, partition+1, end);
-
     } //if
 } //quickSortF
 
-int Sorting::splitArrayR(int* vals[], int start, int end) {
-    int pivInd = start + (rand() % (end - start + 1));
-    int pivot = vals[pivInd];
-    int i = start - 1;
-    for (int j = start; j <= end - 1; j++) {
-        if (vals[j] <= pivot) {
-            i++;
-            swap(vals, i, j);
-        } //if
-        comps++;
-    } //for
-    swap(vals[i+1], vals[end]);
-    return i + 1;
+int Sorting::splitArrayR(int vals[], int start, int end) {
+    srand(time(NULL));
+    int pivInd = start + (rand() % (end - start));
+    swap(&vals[pivInd], &vals[end]);
+    return splitArrayEnd(vals, start, end);
 } //splitArrayF
 
-void Sorting::quickSortR(int* vals[], int start, int end) {
+void Sorting::quickSortR(int vals[], int start, int end) {
     if (start < end) {
         int partition = splitArrayR(vals, start, end);
         quickSortR(vals, start, partition-1);
@@ -164,3 +170,14 @@ int Sorting::getComps () {
 void Sorting::resetComps () {
     comps = 0;
 }
+
+void Sorting::setMax(int max) {
+    maxItems = max;
+}
+
+void Sorting::print(string algo, int vals[], int length) { // written by Taylor
+    for (int i = 0; i < length; i++) {
+        cout << vals[i] << " ";
+    } // for
+    cout << endl << "\t#" << algo << " comparisons: " << comps << endl;
+} // end print
